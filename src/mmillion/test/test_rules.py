@@ -346,4 +346,18 @@ def test_valid_play():
                             trump=Suit.BLACK,
                             trump_broken=False,
     ) == False, "Not following lead color when have other options"
+
+    hand = (
+        TIGER_CARD,
+        BEAR_CARD,
+        BULL_CARD
+    )
+    card = TIGER_CARD
+    trick = []
+    assert rules.valid_play(card=card,
+                            hand=hand,
+                            trick=trick,
+                            trump=Suit.BLACK,
+                            trump_broken=False,
+    ) == True, "Only animal cards so can lead tiger"
     

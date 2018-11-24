@@ -113,7 +113,6 @@ def make_deck() -> List[Card]:
 
 def find_lead_suit(cards: List[Card]) -> Union[Suit, None]:
     for card in cards:
-        # TODO(peter): does leading the tiger mean trump is lead card?
         if card.suit == Suit.TIGER or card.suit in NON_ANIMAL_SUITS:
             return card.suit
     else:
@@ -175,6 +174,15 @@ def valid_play(card: Card,
                trump: Suit,
                trump_broken: bool,
                ) -> bool:
+
+    def has_no_other_legal_options():
+        hand_wo_card = [c for c in hand if c != card]
+        assert len(hand_wo_card) == (len(hand) - 1)
+        return not any([
+            c for c in hand_wo_card
+            if valid_play(c, hand_wo_card, trick, trump, trump_broken)
+        ])
+    
     if card not in hand:
         assert False, "Tried to play card not in hand"
         return False
@@ -183,15 +191,9 @@ def valid_play(card: Card,
     if not trick:  # first card to be played
         if card.suit in (Suit.BEAR, Suit.BULL):
             # can only lead with Bear or Bull if no other options
-            hand_wo_card = [c for c in hand if c != card]
-            assert len(hand_wo_card) == (len(hand) - 1)
-            valid = [
-                c for c in hand_wo_card
-                if valid_play(c, hand_wo_card, trick, trump, trump_broken)
-            ]
-            return not valid
+            return has_no_other_legal_options()
         elif card.suit == trump or card.suit == Suit.TIGER:
-            return trump_broken
+            return trump_broken or has_no_other_legal_options()
         else:
             return True
 
