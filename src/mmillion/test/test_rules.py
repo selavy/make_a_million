@@ -4,6 +4,9 @@
 import mmillion.rules as rules
 from mmillion.rules import Card
 from mmillion.rules import Suit
+from mmillion.rules import TIGER_CARD
+from mmillion.rules import BULL_CARD
+from mmillion.rules import BEAR_CARD
 
 
 def test_rank_as_str():
@@ -53,7 +56,7 @@ def test_find_lead_suit():
     assert rules.find_lead_suit(cards) == Suit.YELLOW
 
     cards = (
-        Card(Suit.BEAR,   0),
+        BEAR_CARD,
         Card(Suit.BLACK,  2),
         Card(Suit.YELLOW, 3),
         Card(Suit.GREEN,  4),
@@ -61,7 +64,7 @@ def test_find_lead_suit():
     assert rules.find_lead_suit(cards) == Suit.BLACK, "Skip bear if first card"
 
     cards = (
-        Card(Suit.BULL,   0),
+        BULL_CARD,
         Card(Suit.BLACK,  2),
         Card(Suit.YELLOW, 3),
         Card(Suit.GREEN,  4),
@@ -69,10 +72,36 @@ def test_find_lead_suit():
     assert rules.find_lead_suit(cards) == Suit.BLACK, "Skip bull if first card"
 
     cards = (
-        Card(Suit.TIGER,  41),
+        TIGER_CARD,
         Card(Suit.BLACK,  2),
         Card(Suit.YELLOW, 3),
         Card(Suit.GREEN,  4),
     )
     assert rules.find_lead_suit(cards) == Suit.TIGER, "Tiger first means trump is lead"
 
+
+def test_winner():
+    cards = (
+        Card(Suit.BLACK, 40),
+        Card(Suit.BLACK, 30),
+        Card(Suit.BLACK, 10),
+        TIGER_CARD,
+    )
+    assert rules.winner(Suit.BLACK, cards) == 3, "Tiger always wins"
+
+    cards = (
+        Card(Suit.BLACK, 10),
+        Card(Suit.BLACK, 30),
+        Card(Suit.BLACK, 40),
+        Card(Suit.BLACK, 1),
+    )
+    assert rules.winner(Suit.YELLOW, cards) == 2, "High card of lead suit"
+    
+    cards = (
+        Card(Suit.BLACK, 10),
+        Card(Suit.BLACK, 30),
+        Card(Suit.BLACK, 40),
+        Card(Suit.YELLOW, 1),
+    )
+    assert rules.winner(Suit.YELLOW, cards) == 3, "Trump card wins"
+        

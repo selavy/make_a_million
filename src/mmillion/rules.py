@@ -60,6 +60,11 @@ class Card:
         return f'{self.suit.name} {rank}'
 
 
+TIGER_CARD = Card(Suit.TIGER, rank=41)
+BEAR_CARD = Card(Suit.BEAR, rank=0)
+BULL_CARD = Card(Suit.BULL, rank=0)
+
+
 def make_suit(suit):
     deck = []
     for i in RANKS:
@@ -76,9 +81,9 @@ def make_deck():
     deck = []
     for suit in NON_ANIMAL_SUITS:
         deck.extend(make_suit(suit))
-    deck.append(Card(suit=Suit.BEAR, rank=0))
-    deck.append(Card(suit=Suit.BULL, rank=0))
-    deck.append(Card(suit=Suit.TIGER, rank=41))
+    deck.append(BEAR_CARD)
+    deck.append(BULL_CARD)
+    deck.append(TIGER_CARD)
     return deck
 
 
@@ -107,16 +112,30 @@ def find_lead_suit(cards):
         return None
 
 
-# def winner(trump, cards):
-#     hidx = 0
-#     hi = cards[0]
-#     lead = find_lead_suit(cards)
-#     for i, card in enumerate(cards[1:]):
-#         if hi.suit == trump and card.suit != trump:
-#             continue
-#         elif hi.suit != trump and card.suit == trump:
-#             hi = card
-#             hidx = i
-#         elif hi.
-    
+def winner(trump, cards):
+    hidx = 0
+    lead = find_lead_suit(cards) or trump
+    for i, card in enumerate(cards):
+        high = cards[hidx]
+        if high.suit == Suit.TIGER:
+            break
+        elif card.suit == Suit.TIGER:
+            hidx = i
+            break
+        elif high.suit == trump and card.suit != trump:
+            continue
+        elif high.suit != trump and card.suit == trump:
+            hidx = i
+        elif high.suit == lead and card.suit != lead:
+            continue
+        elif high.suit != lead and card.suit == lead:
+            hidx = i
+        else:
+            assert high.suit != Suit.TIGER
+            assert card.suit != Suit.TIGER
+            assert (high.suit != trump) == (card.suit != trump)
+            assert (high.suit != lead) == (card.suit != lead)
+            if card.rank > high.rank:
+                hidx = i
+    return hidx
 
