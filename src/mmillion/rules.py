@@ -38,7 +38,7 @@ RESERVED_RANKS = [0, 41]
 MONEY_CARDS = {5, 10, 15, 30, 40}
 
 
-def rank_as_str(x):
+def rank_as_str(x: int) -> str:
     if x in MONEY_CARDS:
         return f'${x:d},000'
     else:
@@ -46,12 +46,12 @@ def rank_as_str(x):
     
 
 class Card:
-    def __init__(self, suit, rank):
+    def __init__(self, suit: Suit, rank: int):
         self.suit = Suit(suit)
         self.rank = int(rank)
         assert self.rank in RANKS
 
-    def value(self):
+    def value(self) -> int:
         if self.rank in MONEY_CARDS:
             return self.rank * 1000
         else:
@@ -74,7 +74,7 @@ BEAR_CARD = Card(Suit.BEAR, rank=0)
 BULL_CARD = Card(Suit.BULL, rank=0)
 
 
-def make_deck():
+def make_deck() -> [Card]:
     def make_suit(suit):
         deck = []
         for i in RANKS:
@@ -95,7 +95,7 @@ def make_deck():
     return deck
 
 
-def find_lead_suit(cards):
+def find_lead_suit(cards: [Card]) -> int:
     for card in cards:
         # TODO(peter): does leading the tiger mean trump is lead card?
         if card.suit == Suit.TIGER or card.suit in NON_ANIMAL_SUITS:
@@ -105,9 +105,13 @@ def find_lead_suit(cards):
         return None
 
 
-def winner(trump, cards):
+def winner(trump: Suit, cards: [Card]) -> int:
     hidx = 0
-    lead = find_lead_suit(cards) or trump
+    lead = find_lead_suit(cards)
+    if lead == Suit.TIGER:
+        lead = trump
+    elif lead is None:
+        lead = trump
     for i, card in enumerate(cards):
         high = cards[hidx]
         if high.suit == Suit.TIGER:
@@ -133,7 +137,7 @@ def winner(trump, cards):
     return hidx
 
 
-def score_hand(cards):
+def score_hand(cards: [Card]) -> int:
     score = sum([c.value() for c in cards])
     for card in reversed(cards):
         if card.suit == Suit.BEAR:
@@ -144,3 +148,17 @@ def score_hand(cards):
             break
     return score
 
+
+def shuffle_deck(cards: [Card]) -> [Card]:
+    from random import shuffle
+    random.shuffle(cards)
+    return cards
+
+
+# def valid_plays(hand: [Card],
+#                 lead: Suit,
+#                 trump: Suit,
+#                 trumps_broken: bool,
+#                ) -> [Card]:
+#     pass
+    
