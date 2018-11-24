@@ -29,7 +29,7 @@ ANIMAL_SUITS = {
 
 # Tiger -> 41
 # Bear, Bull -> 0
-RANKS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 15, 30, 40, 41]
+RANKS = [0, 1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 15, 30, 40, 41]
 RESERVED_RANKS = [0, 41]
 MONEY_CARDS = {5, 10, 15, 30, 40}
 
@@ -43,8 +43,9 @@ def rank_as_str(x):
 
 class Card:
     def __init__(self, suit, rank):
-        self.suit = suit
-        self.rank = rank
+        self.suit = Suit(suit)
+        self.rank = int(rank)
+        assert self.rank in RANKS
 
     def __repr__(self):
         # if self.rank in MONEY_CARDS:
@@ -75,18 +76,22 @@ def wins(trump, lead, c1, c2):
         return c1.rank > c2.rank
 
 
-def mk_suit(suit):
+def make_suit(suit):
     deck = []
     for i in RANKS:
-        if i not in RESERVED_RANKS:
+        if i == 6:  # NOTE(peter); no 6 card for some reason
+            continue
+        elif i in RESERVED_RANKS:
+            continue
+        else:
             deck.append(Card(suit, rank=i))
     return deck
 
 
-def mk_deck():
+def make_deck():
     deck = []
     for suit in NON_ANIMAL_SUITS:
-        deck.extend(mk_suit(suit))
+        deck.extend(make_suit(suit))
     deck.append(Card(suit=Suit.BEAR, rank=0))
     deck.append(Card(suit=Suit.BULL, rank=0))
     deck.append(Card(suit=Suit.TIGER, rank=41))
