@@ -104,4 +104,52 @@ def test_winner():
         Card(Suit.YELLOW, 1),
     )
     assert rules.winner(Suit.YELLOW, cards) == 3, "Trump card wins"
-        
+
+    cards = (
+        Card(Suit.BLACK,  10),
+        Card(Suit.YELLOW, 30),
+        Card(Suit.BLACK,  40),
+        Card(Suit.YELLOW,  1),
+    )
+    assert rules.winner(Suit.YELLOW, cards) == 1, "High trump card"
+
+    cards = (
+        Card(Suit.RED,    1),
+        Card(Suit.BLACK, 30),
+        Card(Suit.BLACK, 40),
+        Card(Suit.BLACK, 10),
+    )
+    assert rules.winner(Suit.YELLOW, cards) == 0, "High lead suit"
+
+    cards = (
+        Card(Suit.RED,    1),
+        Card(Suit.BLACK, 30),
+        Card(Suit.BLACK, 40),
+        Card(Suit.RED,   10),
+    )
+    assert rules.winner(Suit.YELLOW, cards) == 3, "High lead suit"
+
+    cards = (
+        BEAR_CARD,
+        Card(Suit.BLACK, 30),
+        Card(Suit.BLACK, 40),
+        Card(Suit.RED,   10),
+    )
+    assert rules.winner(Suit.YELLOW, cards) == 2, "High lead suit with Bear start"
+
+    cards = (
+        BULL_CARD,
+        Card(Suit.BLACK, 30),
+        Card(Suit.BLACK, 40),
+        Card(Suit.RED,   10),
+    )
+    assert rules.winner(Suit.YELLOW, cards) == 2, "High lead suit with Bull start"
+
+    cards = (
+        BULL_CARD,
+        BEAR_CARD,
+        Card(Suit.BLACK,  1),
+        Card(Suit.RED,   10),
+    )
+    assert rules.winner(Suit.YELLOW, cards) == 2, "High lead suit with Bull and Bear start"
+    
