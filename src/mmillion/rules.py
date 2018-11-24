@@ -3,6 +3,7 @@
 from enum import Enum
 from enum import IntEnum
 from enum import auto
+from typing import List
 
 
 MIN_BID = 175_000
@@ -46,7 +47,7 @@ def rank_as_str(x: int) -> str:
     
 
 class Card:
-    def __init__(self, suit: Suit, rank: int):
+    def __init__(self, suit: Suit, rank: int) -> None:
         self.suit = Suit(suit)
         self.rank = int(rank)
         assert self.rank in RANKS
@@ -74,7 +75,7 @@ BEAR_CARD = Card(Suit.BEAR, rank=0)
 BULL_CARD = Card(Suit.BULL, rank=0)
 
 
-def make_deck() -> [Card]:
+def make_deck() -> List[Card]:
     def make_suit(suit):
         deck = []
         for i in RANKS:
@@ -86,7 +87,7 @@ def make_deck() -> [Card]:
                 deck.append(Card(suit, rank=i))
         return deck
 
-    deck = []
+    deck: List[Card] = []
     for suit in NON_ANIMAL_SUITS:
         deck.extend(make_suit(suit))
     deck.append(BEAR_CARD)
@@ -95,7 +96,7 @@ def make_deck() -> [Card]:
     return deck
 
 
-def find_lead_suit(cards: [Card]) -> int:
+def find_lead_suit(cards: List[Card]) -> Suit:
     for card in cards:
         # TODO(peter): does leading the tiger mean trump is lead card?
         if card.suit == Suit.TIGER or card.suit in NON_ANIMAL_SUITS:
@@ -105,7 +106,7 @@ def find_lead_suit(cards: [Card]) -> int:
         return None
 
 
-def winner(trump: Suit, cards: [Card]) -> int:
+def winner(trump: Suit, cards: List[Card]) -> int:
     hidx = 0
     lead = find_lead_suit(cards)
     if lead == Suit.TIGER:
@@ -137,7 +138,7 @@ def winner(trump: Suit, cards: [Card]) -> int:
     return hidx
 
 
-def score_hand(cards: [Card]) -> int:
+def score_hand(cards: List[Card]) -> int:
     score = sum([c.value() for c in cards])
     for card in reversed(cards):
         if card.suit == Suit.BEAR:
@@ -149,7 +150,7 @@ def score_hand(cards: [Card]) -> int:
     return score
 
 
-def shuffle_deck(cards: [Card]) -> [Card]:
+def shuffle_deck(cards: List[Card]) -> List[Card]:
     from random import shuffle
     random.shuffle(cards)
     return cards

@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-
 import mmillion.rules as rules
 from mmillion.rules import Card
 from mmillion.rules import Suit
