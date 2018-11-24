@@ -177,5 +177,69 @@ def test_score_hand():
     )
     assert rules.score_hand(cards) == 40000
 
+    cards = (
+        Card(Suit.BLACK,  40),
+        Card(Suit.YELLOW, 40),
+        Card(Suit.RED,    40),
+        Card(Suit.GREEN,  40),
+    )
+    assert rules.score_hand(cards) == 160000
 
-    
+    cards = (
+        Card(Suit.BLACK,  40),
+        Card(Suit.YELLOW, 40),
+        Card(Suit.RED,    40),
+        BULL_CARD,
+    )
+    assert rules.score_hand(cards) == 240000, "Bull doubles"
+
+    cards = (
+        Card(Suit.BLACK,  40),
+        Card(Suit.YELLOW, 40),
+        Card(Suit.RED,    40),
+        BEAR_CARD,
+    )
+    assert rules.score_hand(cards) == 0, "Bear cancels"
+
+    cards = (
+        Card(Suit.BLACK,  40),
+        Card(Suit.YELLOW, 40),
+        BULL_CARD,
+        BEAR_CARD,
+    )
+    assert rules.score_hand(cards) == 0, "Bear seconds cancels"
+
+    cards = (
+        BULL_CARD,        
+        Card(Suit.BLACK,  40),
+        Card(Suit.YELLOW, 40),
+        BEAR_CARD,
+    )
+    assert rules.score_hand(cards) == 0, \
+        "Bear seconds cancels (different order)"
+
+    cards = (
+        Card(Suit.BLACK,  40),
+        Card(Suit.YELLOW, 40),
+        BEAR_CARD,        
+        BULL_CARD,
+    )
+    assert rules.score_hand(cards) == 160000, "Bull seconds doubles"
+
+    cards = (
+        BEAR_CARD,
+        Card(Suit.BLACK,  40),
+        Card(Suit.YELLOW, 40),
+        BULL_CARD,
+    )
+    assert rules.score_hand(cards) == 160000, \
+        "Bull seconds doubles (different order)"
+
+    cards = (
+        TIGER_CARD,
+        Card(Suit.BLACK,  40),
+        Card(Suit.YELLOW, 40),
+        Card(Suit.BLACK,   1),
+    )
+    assert rules.score_hand(cards) == 80000, "Tiger is 0"
+
