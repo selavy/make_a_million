@@ -318,4 +318,28 @@ def test_valid_play():
                             trump=Suit.BLACK,
                             trump_broken=False,
     ) == False, "Trumps aren't broken (Tiger is trump)"
+
+    hand = (
+        Card.make(Suit.BLACK, 4),
+        Card.make(Suit.YELLOW, 2),
+        Card.make(Suit.GREEN, 1),
+        Card.make(Suit.BLACK, 2),
+        TIGER_CARD,
+        Card.make(Suit.RED, 1),
+        Card.make(Suit.BLACK, 3),
+        Card.make(Suit.BLACK, 8),
+        Card.make(Suit.GREEN, 5),
+        Card.make(Suit.BULL, 0),
+        Card.make(Suit.YELLOW, 5),
+        Card.make(Suit.YELLOW, 15),
+        Card.make(Suit.GREEN, 2),
+    )
+    card = TIGER_CARD
+    trick = [Card.make(Suit.YELLOW, 40)]
+    assert rules.valid_play(card=card,
+                            hand=hand,
+                            trick=trick,
+                            trump=Suit.BLACK,
+                            trump_broken=False,
+    ) == False, "Not following lead color when have other options"
     

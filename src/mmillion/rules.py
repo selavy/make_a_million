@@ -177,8 +177,10 @@ def valid_play(card: Card,
                trump_broken: bool,
                ) -> bool:
     if card not in hand:
-        assert False, "Tried to play card not in hand!"
+        assert False, "Tried to play card not in hand"
         return False
+    assert card not in trick, \
+        "Trying to play card already in trick, must have been duplicate"
     if not trick:  # first card to be played
         if card.suit in (Suit.BEAR, Suit.BULL):
             # can only lead with Bear or Bull if no other options
