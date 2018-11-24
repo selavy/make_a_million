@@ -5,6 +5,10 @@ from enum import IntEnum
 from enum import auto
 
 
+MIN_BID = 175_000
+GOAL_AMOUNT = 1_000_000
+
+
 class Suit(Enum):
     RED = auto()
     YELLOW = auto()
@@ -54,16 +58,15 @@ class Card:
             return 0
 
     def __repr__(self):
-        # if self.rank in MONEY_CARDS:
-        #     rank = f'${self.rank},000'
-        # else:
-        #     rank = self.rank
         rank = rank_as_str(self.rank)
         return f'<Card: {self.suit.name} {rank}>'
 
     def __str__(self):
-        rank = rank_as_str(self.rank)
-        return f'{self.suit.name} {rank}'
+        if self.suit in ANIMAL_SUITS:
+            return self.suit.name
+        else:
+            rank = rank_as_str(self.rank)
+            return f'{self.suit.name} {rank}'
 
 
 TIGER_CARD = Card(Suit.TIGER, rank=41)
@@ -71,19 +74,18 @@ BEAR_CARD = Card(Suit.BEAR, rank=0)
 BULL_CARD = Card(Suit.BULL, rank=0)
 
 
-def make_suit(suit):
-    deck = []
-    for i in RANKS:
-        if i == 6:  # NOTE(peter); no 6 card for some reason
-            continue
-        elif i in RESERVED_RANKS:
-            continue
-        else:
-            deck.append(Card(suit, rank=i))
-    return deck
-
-
 def make_deck():
+    def make_suit(suit):
+        deck = []
+        for i in RANKS:
+            if i == 6:  # NOTE(peter); no 6 card for some reason
+                continue
+            elif i in RESERVED_RANKS:
+                continue
+            else:
+                deck.append(Card(suit, rank=i))
+        return deck
+
     deck = []
     for suit in NON_ANIMAL_SUITS:
         deck.extend(make_suit(suit))
@@ -92,21 +94,6 @@ def make_deck():
     deck.append(TIGER_CARD)
     return deck
 
-
-# TODO(peter): maybe the interface should be wins(trump, lead, cards) -> index
-# def wins(trump, lead, c1, c2):
-#     if c1.suit == trump and c2.suit != trump:
-#         return True
-#     if c1.suit != trump and c2.suit == trump:
-#         return False
-#     if c1.suit == lead and c2.suit != lead:
-#         return True
-#     if c1.suit != lead and c2.suit == lead:
-#         return False
-#     if c1.rank == c2.rank:  # NOTE(peter): to handle weird case of bear vs bull
-#         return True
-#     else:
-#         return c1.rank > c2.rank
 
 def find_lead_suit(cards):
     for card in cards:

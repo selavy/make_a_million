@@ -175,7 +175,7 @@ def test_score_hand():
         Card(Suit.RED,    1),
         Card(Suit.GREEN,  1),
     )
-    assert rules.score_hand(cards) == 40000
+    assert rules.score_hand(cards) == 40_000
 
     cards = (
         Card(Suit.BLACK,  40),
@@ -183,7 +183,7 @@ def test_score_hand():
         Card(Suit.RED,    40),
         Card(Suit.GREEN,  40),
     )
-    assert rules.score_hand(cards) == 160000
+    assert rules.score_hand(cards) == 160_000
 
     cards = (
         Card(Suit.BLACK,  40),
@@ -191,7 +191,7 @@ def test_score_hand():
         Card(Suit.RED,    40),
         BULL_CARD,
     )
-    assert rules.score_hand(cards) == 240000, "Bull doubles"
+    assert rules.score_hand(cards) == 240_000, "Bull doubles"
 
     cards = (
         Card(Suit.BLACK,  40),
@@ -224,7 +224,7 @@ def test_score_hand():
         BEAR_CARD,        
         BULL_CARD,
     )
-    assert rules.score_hand(cards) == 160000, "Bull seconds doubles"
+    assert rules.score_hand(cards) == 160_000, "Bull seconds doubles"
 
     cards = (
         BEAR_CARD,
@@ -232,7 +232,7 @@ def test_score_hand():
         Card(Suit.YELLOW, 40),
         BULL_CARD,
     )
-    assert rules.score_hand(cards) == 160000, \
+    assert rules.score_hand(cards) == 160_000, \
         "Bull seconds doubles (different order)"
 
     cards = (
@@ -241,5 +241,5 @@ def test_score_hand():
         Card(Suit.YELLOW, 40),
         Card(Suit.BLACK,   1),
     )
-    assert rules.score_hand(cards) == 80000, "Tiger is 0"
+    assert rules.score_hand(cards) == 80_000, "Tiger is 0"
 
