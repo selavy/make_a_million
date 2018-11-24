@@ -7,6 +7,7 @@ from typing import List
 from typing import Union
 from typing import Dict
 from typing import Tuple
+from typing import Type
 
 
 MIN_BID = 175_000
@@ -47,26 +48,24 @@ def rank_as_str(x: int) -> str:
         return f'${x:d},000'
     else:
         return f'{x:d}'
-    
+
 
 class Card:
-    # _cache: Dict[(Suit, int), Card]= {}
     _cache: Dict[Tuple[Suit, int], object] = {}
+    
+    def __new__(cls: Type[object], suit: Suit, rank: int):
+        key = (suit, rank)
+        try:
+            return cls._cache[key]
+        except KeyError:
+            card = object.__new__(cls)
+            cls._cache[key] = card
+            return card
     
     def __init__(self, suit: Suit, rank: int) -> None:
         self.suit = Suit(suit)
         self.rank = int(rank)
         assert self.rank in RANKS
-
-    @classmethod
-    def make(cls, suit: Suit, rank: int):
-        key = (suit, rank)
-        try:
-            return cls._cache[key]
-        except KeyError:
-            card = Card(suit, rank)
-            cls._cache[key] = card
-            return card
 
     def value(self) -> int:
         if self.rank in MONEY_CARDS:
@@ -86,9 +85,9 @@ class Card:
             return f'{self.suit.name} {rank}'
 
 
-TIGER_CARD = Card.make(Suit.TIGER, rank=41)
-BEAR_CARD = Card.make(Suit.BEAR, rank=0)
-BULL_CARD = Card.make(Suit.BULL, rank=0)
+TIGER_CARD = Card(Suit.TIGER, rank=41)
+BEAR_CARD = Card(Suit.BEAR, rank=0)
+BULL_CARD = Card(Suit.BULL, rank=0)
 
 
 def make_deck() -> List[Card]:
@@ -100,7 +99,7 @@ def make_deck() -> List[Card]:
             elif i in RESERVED_RANKS:
                 continue
             else:
-                deck.append(Card.make(suit, rank=i))
+                deck.append(Card(suit, rank=i))
         return deck
 
     deck: List[Card] = []
