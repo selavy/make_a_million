@@ -47,6 +47,12 @@ class Card:
         self.rank = int(rank)
         assert self.rank in RANKS
 
+    def value(self):
+        if self.rank in MONEY_CARDS:
+            return self.rank * 1000
+        else:
+            return 0
+
     def __repr__(self):
         # if self.rank in MONEY_CARDS:
         #     rank = f'${self.rank},000'
@@ -138,4 +144,16 @@ def winner(trump, cards):
             if card.rank > high.rank:
                 hidx = i
     return hidx
+
+
+def score_hand(cards):
+    score = sum([c.value() for c in cards])
+    for card in reversed(cards):
+        if card.suit == Suit.BEAR:
+            score = 0
+            break
+        elif card.suit == Suit.BULL:
+            score *= 2
+            break
+    return score
 

@@ -158,4 +158,24 @@ def test_winner():
     )
     assert rules.winner(Suit.YELLOW, cards) == 2, \
         "High lead suit with Bull and Bear start"
+
+    
+def test_score_hand():
+    cards = (
+        Card(Suit.BLACK,  1),
+        Card(Suit.YELLOW, 1),
+        Card(Suit.RED,    1),
+        Card(Suit.GREEN,  1),
+    )
+    assert rules.score_hand(cards) == 0
+
+    cards = (
+        Card(Suit.BLACK,  1),
+        Card(Suit.YELLOW, 40),
+        Card(Suit.RED,    1),
+        Card(Suit.GREEN,  1),
+    )
+    assert rules.score_hand(cards) == 40000
+
+
     
