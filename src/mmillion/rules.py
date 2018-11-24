@@ -4,6 +4,7 @@ from enum import Enum
 from enum import IntEnum
 from enum import auto
 from typing import List
+from typing import Union
 
 
 MIN_BID = 175_000
@@ -15,8 +16,8 @@ class Suit(Enum):
     YELLOW = auto()
     BLACK = auto()
     GREEN = auto()
-    # REVISIT(peter): is it better to have the animals as separate
-    #                 suits or 
+    # REVISIT(peter): is it better to have the animals as separate suits?
+    # REVISIT(peter): could instead of bitfield so that TIGER could be (TIGER | TRUMP)?
     BEAR = auto()
     BULL = auto()
     TIGER = auto()
@@ -96,22 +97,20 @@ def make_deck() -> List[Card]:
     return deck
 
 
-def find_lead_suit(cards: List[Card]) -> Suit:
+def find_lead_suit(cards: List[Card]) -> Union[Suit, None]:
     for card in cards:
         # TODO(peter): does leading the tiger mean trump is lead card?
         if card.suit == Suit.TIGER or card.suit in NON_ANIMAL_SUITS:
             return card.suit
     else:
-        assert False, "Unable to find a lead suit!"
         return None
 
 
 def winner(trump: Suit, cards: List[Card]) -> int:
     hidx = 0
     lead = find_lead_suit(cards)
+    assert lead is not None, "Unable to determine lead suit!"
     if lead == Suit.TIGER:
-        lead = trump
-    elif lead is None:
         lead = trump
     for i, card in enumerate(cards):
         high = cards[hidx]
@@ -152,14 +151,41 @@ def score_hand(cards: List[Card]) -> int:
 
 def shuffle_deck(cards: List[Card]) -> List[Card]:
     from random import shuffle
-    random.shuffle(cards)
+    shuffle(cards)
     return cards
 
 
-# def valid_plays(hand: [Card],
-#                 lead: Suit,
-#                 trump: Suit,
-#                 trumps_broken: bool,
-#                ) -> [Card]:
-#     pass
+def valid_play(card: Card,
+               hand: List[Card],
+               trick: List[Card],
+               trump: Suit,
+               trump_broken: bool,
+               ) -> bool:
+    # TODO(peter): use flyweight pattern for cards
+    if any([c for c in hand if c == card]):
+        assert False, "Tried to play card not in hand!"
+        return False
+    if not trick:  # first card to be played
+        if card.suit in (Suit.BEAR, Suit.BULL):
+            # can only lead with Bear or Bull if no other options
+            hand_wo_card = [c for c in hand if c != card]
+            assert len(hand_wo_card) == (len(hand) - 1)
+            valid = [
+                c for c in hand_wo_card
+                if valid_play(c, hand_wo_card, trick, trump, trump_broken)
+            ]
+            return not valid
+        elif card.suit == trump or card.suit == Suit.TIGER:
+            return trump_broken
+        else:
+            return True
+
+    assert trick, "This play is not leading"
+    lead = find_lead_suit(trick)
+    if card.suit == lead:
+        return True
+    if card.suit == Suit.TIGER and lead == trump:
+        return True
+    other_valid = [c for c in hand if c != card and c.suit == lead]
+    return not other_valid
     

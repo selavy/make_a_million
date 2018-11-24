@@ -81,6 +81,9 @@ def test_find_lead_suit():
     assert rules.find_lead_suit(cards) == Suit.TIGER, \
         "Tiger first means trump is lead"
 
+    assert rules.find_lead_suit([]) is None, \
+        "Handle no cards in trick"
+
 
 def test_winner():
     cards = (
@@ -242,3 +245,54 @@ def test_score_hand():
     )
     assert rules.score_hand(cards) == 80_000, "Tiger is 0"
 
+
+def test_valid_play():
+    hand = (
+        Card(Suit.BLACK, 4),
+        Card(Suit.YELLOW, 2),
+        Card(Suit.GREEN, 1),
+        Card(Suit.BLACK, 2),
+        Card(Suit.TIGER, 41),
+        Card(Suit.RED, 1),
+        Card(Suit.BLACK, 3),
+        Card(Suit.BLACK, 8),
+        Card(Suit.GREEN, 5),
+        Card(Suit.BULL, 0),
+        Card(Suit.YELLOW, 5),
+        Card(Suit.YELLOW, 15),
+        Card(Suit.GREEN, 2),
+    )
+    card = Card(Suit.BLACK, 4)
+    trick = []
+    assert rules.valid_play(card=card,
+                            hand=hand,
+                            trick=trick,
+                            trump=Suit.BLACK,
+                            trump_broken=False,
+    ) == False, "Trumps aren't broken"
+
+    
+    hand = (
+        Card(Suit.BLACK, 4),
+        Card(Suit.YELLOW, 2),
+        Card(Suit.GREEN, 1),
+        Card(Suit.BLACK, 2),
+        Card(Suit.TIGER, 41),
+        Card(Suit.RED, 1),
+        Card(Suit.BLACK, 3),
+        Card(Suit.BLACK, 8),
+        Card(Suit.GREEN, 5),
+        Card(Suit.BULL, 0),
+        Card(Suit.YELLOW, 5),
+        Card(Suit.YELLOW, 15),
+        Card(Suit.GREEN, 2),
+    )
+    card = Card(Suit.BLACK, 4)
+    trick = []
+    assert rules.valid_play(card=card,
+                            hand=hand,
+                            trick=trick,
+                            trump=Suit.BLACK,
+                            trump_broken=True,
+    ) == True, "Trumps are broken"
+    
