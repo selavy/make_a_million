@@ -2,6 +2,8 @@
 
 
 import mmillion.rules as rules
+from mmillion.rules import Card
+from mmillion.rules import Suit
 
 
 def test_rank_as_str():
@@ -39,3 +41,38 @@ def test_make_deck():
 
     assert len(deck) == len(set(deck)), "No duplicate cards"
     assert len(deck) == 13*4 + 3
+
+
+def test_find_lead_suit():
+    cards = (
+        Card(Suit.YELLOW, 1),
+        Card(Suit.BLACK,  2),
+        Card(Suit.YELLOW, 3),
+        Card(Suit.GREEN,  4),
+    )
+    assert rules.find_lead_suit(cards) == Suit.YELLOW
+
+    cards = (
+        Card(Suit.BEAR,   0),
+        Card(Suit.BLACK,  2),
+        Card(Suit.YELLOW, 3),
+        Card(Suit.GREEN,  4),
+    )
+    assert rules.find_lead_suit(cards) == Suit.BLACK, "Skip bear if first card"
+
+    cards = (
+        Card(Suit.BULL,   0),
+        Card(Suit.BLACK,  2),
+        Card(Suit.YELLOW, 3),
+        Card(Suit.GREEN,  4),
+    )
+    assert rules.find_lead_suit(cards) == Suit.BLACK, "Skip bull if first card"
+
+    cards = (
+        Card(Suit.TIGER,  41),
+        Card(Suit.BLACK,  2),
+        Card(Suit.YELLOW, 3),
+        Card(Suit.GREEN,  4),
+    )
+    assert rules.find_lead_suit(cards) == Suit.TIGER, "Tiger first means trump is lead"
+

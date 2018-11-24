@@ -60,22 +60,6 @@ class Card:
         return f'{self.suit.name} {rank}'
 
 
-# TODO(peter): maybe the interface should be wins(trump, lead, cards) -> index
-def wins(trump, lead, c1, c2):
-    if c1.suit == trump and c2.suit != trump:
-        return True
-    if c1.suit != trump and c2.suit == trump:
-        return False
-    if c1.suit == lead and c2.suit != lead:
-        return True
-    if c1.suit != lead and c2.suit == lead:
-        return False
-    if c1.rank == c2.rank:  # NOTE(peter): to handle weird case of bear vs bull
-        return True
-    else:
-        return c1.rank > c2.rank
-
-
 def make_suit(suit):
     deck = []
     for i in RANKS:
@@ -98,7 +82,41 @@ def make_deck():
     return deck
 
 
-# if __name__ == '__main__':
-#     deck = mk_deck()
-#     for card in deck:
-#         print(card)
+# TODO(peter): maybe the interface should be wins(trump, lead, cards) -> index
+# def wins(trump, lead, c1, c2):
+#     if c1.suit == trump and c2.suit != trump:
+#         return True
+#     if c1.suit != trump and c2.suit == trump:
+#         return False
+#     if c1.suit == lead and c2.suit != lead:
+#         return True
+#     if c1.suit != lead and c2.suit == lead:
+#         return False
+#     if c1.rank == c2.rank:  # NOTE(peter): to handle weird case of bear vs bull
+#         return True
+#     else:
+#         return c1.rank > c2.rank
+
+def find_lead_suit(cards):
+    for card in cards:
+        # TODO(peter): does leading the tiger mean trump is lead card?
+        if card.suit == Suit.TIGER or card.suit in NON_ANIMAL_SUITS:
+            return card.suit
+    else:
+        assert False, "Unable to find a lead suit!"
+        return None
+
+
+# def winner(trump, cards):
+#     hidx = 0
+#     hi = cards[0]
+#     lead = find_lead_suit(cards)
+#     for i, card in enumerate(cards[1:]):
+#         if hi.suit == trump and card.suit != trump:
+#             continue
+#         elif hi.suit != trump and card.suit == trump:
+#             hi = card
+#             hidx = i
+#         elif hi.
+    
+
