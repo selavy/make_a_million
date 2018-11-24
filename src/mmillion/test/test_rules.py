@@ -61,7 +61,8 @@ def test_find_lead_suit():
         Card(Suit.YELLOW, 3),
         Card(Suit.GREEN,  4),
     )
-    assert rules.find_lead_suit(cards) == Suit.BLACK, "Skip bear if first card"
+    assert rules.find_lead_suit(cards) == Suit.BLACK, \
+        "Skip bear if first card"
 
     cards = (
         BULL_CARD,
@@ -69,7 +70,8 @@ def test_find_lead_suit():
         Card(Suit.YELLOW, 3),
         Card(Suit.GREEN,  4),
     )
-    assert rules.find_lead_suit(cards) == Suit.BLACK, "Skip bull if first card"
+    assert rules.find_lead_suit(cards) == Suit.BLACK, \
+        "Skip bull if first card"
 
     cards = (
         TIGER_CARD,
@@ -77,7 +79,8 @@ def test_find_lead_suit():
         Card(Suit.YELLOW, 3),
         Card(Suit.GREEN,  4),
     )
-    assert rules.find_lead_suit(cards) == Suit.TIGER, "Tiger first means trump is lead"
+    assert rules.find_lead_suit(cards) == Suit.TIGER, \
+        "Tiger first means trump is lead"
 
 
 def test_winner():
@@ -135,7 +138,8 @@ def test_winner():
         Card(Suit.BLACK, 40),
         Card(Suit.RED,   10),
     )
-    assert rules.winner(Suit.YELLOW, cards) == 2, "High lead suit with Bear start"
+    assert rules.winner(Suit.YELLOW, cards) == 2, \
+        "High lead suit with Bear start"
 
     cards = (
         BULL_CARD,
@@ -143,7 +147,8 @@ def test_winner():
         Card(Suit.BLACK, 40),
         Card(Suit.RED,   10),
     )
-    assert rules.winner(Suit.YELLOW, cards) == 2, "High lead suit with Bull start"
+    assert rules.winner(Suit.YELLOW, cards) == 2, \
+        "High lead suit with Bull start"
 
     cards = (
         BULL_CARD,
@@ -151,5 +156,6 @@ def test_winner():
         Card(Suit.BLACK,  1),
         Card(Suit.RED,   10),
     )
-    assert rules.winner(Suit.YELLOW, cards) == 2, "High lead suit with Bull and Bear start"
+    assert rules.winner(Suit.YELLOW, cards) == 2, \
+        "High lead suit with Bull and Bear start"
     
