@@ -21,8 +21,8 @@ def fmt_card(card):
 
 def print_hand(hand, card, trick, trump, trump_broken):
     print(f"    hand = (")
-    for card in hand:
-        print(f"        {fmt_card(card)},")
+    for c in hand:
+        print(f"        {fmt_card(c)},")
     print(f"    )")
     print(f"    card = {fmt_card(card)}")
     if trick:
@@ -40,13 +40,28 @@ def print_hand(hand, card, trick, trump, trump_broken):
     print(f"    ) == True")
 
 
+def pick(cs):
+    # return cards[random.randint(0, len(cards)-1)]
+    return random.choice(cs)
+
+
+hand_size = 5
 suits = [Suit.RED, Suit.BLACK, Suit.YELLOW, Suit.GREEN,]
-hand = deck[:13]
-card = hand[0]
+hand = deck[:hand_size]
+# card = hand[0]
 trick = []
 trick_cards = 3
 for i in range(trick_cards):
-    trick.append(deck[random.randint(14, len(deck)-1)])
+    trick.append(pick(deck[hand_size+1:]))
+if trick:
+    lead = trick[0].suit
+    valid = [c for c in hand if c.suit == lead]
+    if not valid:
+        valid = hand
+    card = pick(valid)
+else:
+    card = pick(hand)
+    
 trump = suits[random.randint(0, 3)]
 trump_broken = bool(random.randint(0, 1))
 print_hand(hand, card, trick, trump, trump_broken)

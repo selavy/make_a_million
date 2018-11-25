@@ -387,5 +387,81 @@ def test_valid_play():
                             trick=trick,
                             trump=Suit.RED,
                             trump_broken=True,
-    ) == False, "Not following lead suit"    
+    ) == False, "Not following lead suit"
+
+    hand = (
+        Card(Suit.YELLOW, 40),
+        Card(Suit.RED, 8),
+        Card(Suit.RED, 11),
+        Card(Suit.GREEN, 2),
+        Card(Suit.RED, 10),
+        Card(Suit.RED, 40),
+        Card(Suit.GREEN, 7),
+        Card(Suit.YELLOW, 30),
+        Card(Suit.YELLOW, 11),
+        Card(Suit.RED, 30),
+        Card(Suit.GREEN, 4),
+        Card(Suit.GREEN, 15),
+        Card(Suit.BLACK, 11),
+    )
+    card = Card(Suit.BLACK, 11)
+    trick = [
+        Card(Suit.BLACK, 7),
+        Card(Suit.YELLOW, 5),
+        Card(Suit.YELLOW, 15),
+    ]
+    assert rules.valid_play(card=card,
+                            hand=hand,
+                            trick=trick,
+                            trump=Suit.GREEN,
+                            trump_broken=False,
+    ) == True
+
+    hand = (
+        Card(Suit.GREEN, 30),
+        Card(Suit.BLACK, 5),
+        Card(Suit.GREEN, 9),
+        Card(Suit.GREEN, 8),
+        Card(Suit.BLACK, 3),
+        Card(Suit.YELLOW, 5),
+        Card(Suit.GREEN, 5),
+        Card(Suit.RED, 7),
+        Card(Suit.BLACK, 8),
+        Card(Suit.YELLOW, 1),
+        BEAR_CARD,
+        Card(Suit.RED, 5),
+        Card(Suit.GREEN, 15),
+    )
+    card = Card(Suit.BLACK, 5)
+    trick = [
+        Card(Suit.BLACK, 1),
+        Card(Suit.BLACK, 11),
+        Card(Suit.RED, 1),
+    ]
+    assert rules.valid_play(card=card,
+                            hand=hand,
+                            trick=trick,
+                            trump=Suit.BLACK,
+                            trump_broken=True,
+    ) == True
+    
+    hand = (
+        Card(Suit.YELLOW, 10),
+        Card(Suit.YELLOW, 9),
+        Card(Suit.YELLOW, 5),
+        Card(Suit.YELLOW, 3),
+        TIGER_CARD,
+    )
+    card = Card(Suit.YELLOW, 3)
+    trick = [
+        Card(Suit.GREEN, 8),
+        Card(Suit.RED, 8),
+        Card(Suit.RED, 4),
+    ]
+    assert rules.valid_play(card=card,
+                            hand=hand,
+                            trick=trick,
+                            trump=Suit.BLACK,
+                            trump_broken=False,
+    ) == True
     
