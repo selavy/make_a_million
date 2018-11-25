@@ -205,3 +205,15 @@ def valid_play(card: Card,
         return True
     other_valid = [c for c in hand if c != card and c.suit == lead]
     return not other_valid
+
+
+def valid_cards(hand: List[Card],
+                trick: List[Card],
+                trump: Suit,
+                trump_broken: bool,
+                ) -> List[Card]:
+    def ok(card):
+        valid_play(card, hand, trick, trump, trump_broken)
+
+    return [c for c in hand if ok(c)]
+
