@@ -205,4 +205,3 @@ def valid_play(card: Card,
         return True
     other_valid = [c for c in hand if c != card and c.suit == lead]
     return not other_valid
-    

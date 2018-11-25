@@ -360,4 +360,32 @@ def test_valid_play():
                             trump=Suit.BLACK,
                             trump_broken=False,
     ) == True, "Only animal cards so can lead tiger"
+
+    hand = (
+        Card(Suit.YELLOW, 8),
+        Card(Suit.GREEN, 30),
+        Card(Suit.RED, 10),
+        Card(Suit.BLACK, 15),
+        Card(Suit.YELLOW, 7),
+        Card(Suit.GREEN, 4),
+        Card(Suit.YELLOW, 40),
+        TIGER_CARD,
+        Card(Suit.GREEN, 7),
+        Card(Suit.RED, 30),
+        Card(Suit.GREEN, 10),
+        Card(Suit.RED, 8),
+        Card(Suit.GREEN, 2),
+    )
+    card = Card(Suit.GREEN, 2)
+    trick = [
+        Card(Suit.YELLOW, 9),
+        Card(Suit.BLACK, 7),
+        Card(Suit.GREEN, 9),
+    ]
+    assert rules.valid_play(card=card,
+                            hand=hand,
+                            trick=trick,
+                            trump=Suit.RED,
+                            trump_broken=True,
+    ) == False, "Not following lead suit"    
     
